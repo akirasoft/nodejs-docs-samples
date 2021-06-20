@@ -50,6 +50,7 @@ describe('speechTranslate tests', () => {
         await new Promise(r => client.connect(8080, 'localhost', r));
         client.destroy();
         console.log('connected!');
+        break;
       } catch (e) {
         console.log(e);
         await new Promise(r => setTimeout(r, 1000));
