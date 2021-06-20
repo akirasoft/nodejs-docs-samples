@@ -82,7 +82,7 @@ describe('speechTranslate tests', () => {
             audioContent: 'base64-audio-content',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Invalid encoding.');
       });
 
@@ -95,7 +95,7 @@ describe('speechTranslate tests', () => {
             audioContent: 'base64-audio-content',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Invalid encoding.');
       });
     });
@@ -110,7 +110,7 @@ describe('speechTranslate tests', () => {
             audioContent: 'base64-audio-content',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Sample rate hertz must be numeric.');
       });
 
@@ -123,7 +123,7 @@ describe('speechTranslate tests', () => {
             audioContent: 'base64-audio-content',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Sample rate hertz must be numeric.');
       });
 
@@ -136,7 +136,7 @@ describe('speechTranslate tests', () => {
             audioContent: 'base64-audio-content',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Sample rate hertz must be numeric.');
       });
     });
@@ -151,7 +151,7 @@ describe('speechTranslate tests', () => {
             audioContent: 'base64-audio-content',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Invalid language code.');
       });
 
@@ -164,7 +164,7 @@ describe('speechTranslate tests', () => {
             audioContent: 'base64-audio-content',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Invalid language code.');
       });
     });
@@ -179,7 +179,7 @@ describe('speechTranslate tests', () => {
             // audioContent: 'base64-audio-content'
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Invalid audio content.');
       });
 
@@ -192,7 +192,7 @@ describe('speechTranslate tests', () => {
             audioContent: '',
           },
         });
-        assert.strictEqual(response.statusCode, 400);
+        assert.strictEqual(response.status, 400);
         assert.strictEqual(response.data, 'Invalid audio content.');
       });
     });
@@ -213,7 +213,7 @@ describe('speechTranslate tests', () => {
           },
         });
 
-        assert.strictEqual(response.statusCode, 200);
+        assert.strictEqual(response.status, 200);
 
         // Test transcription
         response.data.translations.forEach(translation => {
