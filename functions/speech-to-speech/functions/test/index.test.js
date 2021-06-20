@@ -19,6 +19,7 @@ const assert = require('assert');
 const fs = require('fs');
 const execPromise = require('child-process-promise').exec;
 const gaxios = require('gaxios');
+const net = require('net');
 
 const path = require('path');
 const cwd = path.join(__dirname, '..');
@@ -30,7 +31,6 @@ const BASE_URL = 'http://localhost:8080';
 const outputBucket = storage.bucket(process.env.OUTPUT_BUCKET);
 
 gaxios.instance.defaults = {
-  retry: true,
   method: 'POST',
   url: `${BASE_URL}/speechTranslate`,
   validateStatus: () => true,
@@ -38,11 +38,24 @@ gaxios.instance.defaults = {
 
 describe('speechTranslate tests', () => {
   let ffProc;
-  before(() => {
+  before(async () => {
     ffProc = execPromise(
       'functions-framework --target=speechTranslate --signature-type=http',
       {timeout: 8000, shell: true, cwd}
     );
+    // wait for the function to start serving
+    const client = new net.Socket();
+    for (const i = 0; i < 10; i++) {
+      try {
+        await new Promise(r => client.connect(8080, 'localhost', r));
+        client.destroy();
+        console.log('connected!');
+      } catch (e) {
+        console.log(e);
+        await new Promise(r => setTimeout(r, 1000));
+      }
+    }
+
   });
 
   after(async () => {
