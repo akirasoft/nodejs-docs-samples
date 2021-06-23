@@ -17,6 +17,8 @@
 // Require process, so we can mock environment variables.
 const process = require('process');
 
+const {wrapMainKnexAsMiddleware} = require('@google-cloud/sqlcommenter-knex');
+
 const express = require('express');
 const Knex = require('knex');
 
@@ -35,6 +37,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(wrapMainKnexAsMiddleware(Knex, {
+    traceparent: true,
+    tracestate: true,
+    route: true,
+    db_driver: true
+}));
 // Create a Winston logger that streams to Stackdriver Logging.
 const winston = require('winston');
 const {LoggingWinston} = require('@google-cloud/logging-winston');
@@ -165,6 +173,19 @@ const getVotes = async pool => {
 };
 
 /**
+ * Retrieve all vote records from the database.
+ *
+ * @param {object} pool The Knex connection object.
+ * @returns {Promise}
+ */
+const getAllVotes = async pool => {
+  return await pool
+    .select('candidate', 'time_cast')
+    .from('votes')
+    .orderBy('time_cast', 'desc');
+};
+
+/**
  * Retrieve the total count of records for a given candidate
  * from the database.
  *
@@ -172,6 +193,8 @@ const getVotes = async pool => {
  * @param {object} candidate The candidate for which to get the total vote count
  * @returns {Promise}
  */
+
+
 const getVoteCount = async (pool, candidate) => {
   return await pool('votes').count('vote_id').where('candidate', candidate);
 };
@@ -250,6 +273,24 @@ app.post('/', async (req, res) => {
     return;
   }
   res.status(200).send(`Successfully voted for ${team} at ${timestamp}`).end();
+});
+
+app.get('/getAllVotes', async (req, res) => {
+  pool = pool || createPool();
+  try {
+    // Query all votes from the database.
+    const votes = await getAllVotes(pool);
+
+    res.render('allvotes.pug', {
+      votes: votes,
+    });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send('Unable to load page; see logs for more details.')
+      .end();
+  }
 });
 
 const PORT = process.env.PORT || 8080;

@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+  head
+    title Tabs VS Spaces
+
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/icon?family=Material+Icons")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js")
+  body
+
+    nav(class="red lighten-1")
+      div(class="nav-wrapper")
+        a(href="#" class="brand-logo center") Tabs VS Spaces
+
+    div(class="section")
+
+      h4(class="header center") Recent Votes
+      ul(class="container collection center")
+        each vote in votes
+          li(class="collection-item avatar")
+            if vote.candidate.trim() === 'TABS'
+              i(class="material-icons circle green") keyboard_tab
+            else
+              i(class="material-icons circle blue") space_bar
+            span(class="title") A vote for <b>#{vote.candidate}</b>
+            p was cast at #{vote.time_cast}.
