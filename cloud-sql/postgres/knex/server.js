@@ -17,6 +17,16 @@
 // Require process, so we can mock environment variables.
 
 // In file app.js.
+
+// Create a Winston logger that streams to Stackdriver Logging.
+const winston = require('winston');
+const {LoggingWinston} = require('@google-cloud/logging-winston');
+const loggingWinston = new LoggingWinston();
+const logger = winston.createLogger({
+  level: 'info',
+  transports: [new winston.transports.Console(), loggingWinston],
+});
+
 const { NodeTracerProvider } = require("@opentelemetry/node");
 const { BatchSpanProcessor } = require("@opentelemetry/tracing");
 const {
@@ -69,14 +79,7 @@ app.use(wrapMainKnexAsMiddleware(Knex, {
     route: true,
     db_driver: true
 }));
-// Create a Winston logger that streams to Stackdriver Logging.
-const winston = require('winston');
-const {LoggingWinston} = require('@google-cloud/logging-winston');
-const loggingWinston = new LoggingWinston();
-const logger = winston.createLogger({
-  level: 'info',
-  transports: [new winston.transports.Console(), loggingWinston],
-});
+
 
 // Set up a variable to hold our connection pool. It would be safe to
 // initialize this right away, but we defer its instantiation to ease
