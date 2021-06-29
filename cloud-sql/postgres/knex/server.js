@@ -15,6 +15,32 @@
 'use strict';
 
 // Require process, so we can mock environment variables.
+
+// In file app.js.
+const { NodeTracerProvider } = require("@opentelemetry/node");
+const { BatchSpanProcessor } = require("@opentelemetry/tracing");
+const {
+  TraceExporter,
+} = require("@google-cloud/opentelemetry-cloud-trace-exporter");
+
+const tracerProvider = new NodeTracerProvider();
+// Export to Google Cloud Trace
+tracerProvider.addSpanProcessor(
+  new BatchSpanProcessor(new TraceExporter({ logger }), {
+    bufferSize: 500,
+    bufferTimeout: 5 * 1000,
+  })
+);
+tracerProvider.register();
+
+// OpenTelemetry initialization should happen before importing any libraries
+// that it instruments
+
+
+
+
+
+
 const process = require('process');
 
 const {wrapMainKnexAsMiddleware} = require('@google-cloud/sqlcommenter-knex');
