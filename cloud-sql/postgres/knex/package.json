@@ -28,14 +28,14 @@
     "@opentelemetry/node": "^0.24.0",
     "@opentelemetry/tracing": "^0.24.0",
     "express": "^4.16.2",
-    "knex": "^0.95.0",
-    "pg": "^8.0.0",
+    "knex": "^0.95.11",
+    "pg": "^8.7.1",
     "pug": "^3.0.0",
     "winston": "^3.1.0",
-    "yargs": "^17.0.0"
+    "yargs": "^17.1.1"
   },
   "devDependencies": {
     "mocha": "^8.0.0",
-    "supertest": "^6.0.0"
+    "supertest": "^6.1.6"
   }
 }
