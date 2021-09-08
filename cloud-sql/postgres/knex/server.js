@@ -30,9 +30,9 @@ const logger = winston.createLogger({
 const { NodeTracerProvider } = require("@opentelemetry/node");
 const { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor } = require("@opentelemetry/tracing");
 
-const {
-  TraceExporter,
-} = require("@google-cloud/opentelemetry-cloud-trace-exporter");
+// const {
+//   TraceExporter,
+// } = require("@google-cloud/opentelemetry-cloud-trace-exporter");
 
 const consoleExporter = new ConsoleSpanExporter();
 
