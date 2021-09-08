@@ -28,19 +28,27 @@ const logger = winston.createLogger({
 });
 
 const { NodeTracerProvider } = require("@opentelemetry/node");
-const { BatchSpanProcessor } = require("@opentelemetry/tracing");
+const { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor } = require("@opentelemetry/tracing");
+
 const {
   TraceExporter,
 } = require("@google-cloud/opentelemetry-cloud-trace-exporter");
 
+const consoleExporter = new ConsoleSpanExporter();
+
 const tracerProvider = new NodeTracerProvider();
 // Export to Google Cloud Trace
+// tracerProvider.addSpanProcessor(
+//   new BatchSpanProcessor(new TraceExporter({ logger }), {
+//     bufferSize: 500,
+//     bufferTimeout: 5 * 1000,
+//   })
+// );
 tracerProvider.addSpanProcessor(
-  new BatchSpanProcessor(new TraceExporter({ logger }), {
-    bufferSize: 500,
-    bufferTimeout: 5 * 1000,
-  })
+  new SimpleSpanProcessor(consoleExporter)
 );
+
+
 tracerProvider.register();
 
 // OpenTelemetry initialization should happen before importing any libraries
